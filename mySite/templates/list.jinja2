@@ -6,7 +6,21 @@
 </head>
 <body>
 
+{# python express, call to pyramid's request.route_url to compute our url #}
+<a href="{{ request.route_url('add') }}">add  </a>
 <h1>ToDos - List</h1>
+<br/>
+{# the id value that we are passing in our request.route_url is a nessesary
+   the value id is called such because in our __init__.py routes this is what is expected
+   other size the api will not work #}
+<a href="{{ request.route_url('view', id='1') }}">FIRST</a>
+<br/>
+<a href="{{ request.route_url('edit', id='1') }}">edit</a>
+<br/>
+<a href="{{ request.route_url('delete', id='1') }}">delete</a>
+
+
+
 
 </body>
 </html>
