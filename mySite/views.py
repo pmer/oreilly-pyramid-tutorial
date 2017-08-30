@@ -1,5 +1,5 @@
-from pyramid.httpexceptions import HTTPFound
-from pyramid.view import view_config
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound
+from pyramid.view import view_config, notfound_view_config
 
 # check out @view_defaults to define a series of view functions that share a route
 # but differ in another way for example by their request_method ie. GET, POST, DELETE, PUT
@@ -16,6 +16,10 @@ class MySite:
     def current(self):
         return self.request.matchdict.get('id')
 
+    @notfound_view_config(renderer='templates/notfound.jinja2')
+    def not_found(self):
+        return dict()
+
     @view_config(route_name='list',
                  renderer='templates/list.jinja2')
     def list(self):
@@ -29,6 +33,10 @@ class MySite:
     @view_config(route_name='view',
                  renderer='templates/view.jinja2')
     def view(self):
+        if self.current != '1':
+            # pyramid exception that we imported
+            # raising instead of returning is helpful if you are several levels into a program
+            raise HTTPNotFound()
         return dict()
 
     @view_config(route_name='edit',
