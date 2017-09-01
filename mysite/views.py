@@ -21,8 +21,6 @@ class MySite:
     def current(self):
         todo_id = self.request.matchdict.get('id')
         todo = sample_todos.get(todo_id)
-        if not todo:
-            raise HTTPNotFound()
         return todo
 
     @notfound_view_config(renderer='templates/notfound.jinja2')
@@ -47,7 +45,10 @@ class MySite:
     @view_config(route_name='view',
                  renderer='templates/view.jinja2')
     def view(self):
-        return dict(todo=self.current)
+        todo = self.current
+        if not todo:
+            raise HTTPNotFound()
+        return dict(todo=todo)
 
     @view_config(route_name='edit',
                  renderer='templates/edit.jinja2')
